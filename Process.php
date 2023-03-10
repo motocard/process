@@ -308,8 +308,6 @@ class Process implements \IteratorAggregate
             $env += $this->env;
         }
 
-        $env += $this->getDefaultEnv();
-
         if (\is_array($commandline = $this->commandline)) {
             $commandline = implode(' ', array_map([$this, 'escapeArgument'], $commandline));
 
@@ -1654,24 +1652,5 @@ class Process implements \IteratorAggregate
 
             return $this->escapeArgument($env[$matches[1]]);
         }, $commandline);
-    }
-
-    private function getDefaultEnv(): array
-    {
-        $env = [];
-
-        foreach ($_SERVER as $k => $v) {
-            if (\is_string($v) && false !== $v = getenv($k)) {
-                $env[$k] = $v;
-            }
-        }
-
-        foreach ($_ENV as $k => $v) {
-            if (\is_string($v)) {
-                $env[$k] = $v;
-            }
-        }
-
-        return $env;
     }
 }
